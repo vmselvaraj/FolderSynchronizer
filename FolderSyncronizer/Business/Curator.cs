@@ -18,6 +18,7 @@ namespace FolderSyncronizer.Business
                     var itemInLocal = local.GetItem(remoteItem.RelativePath);
                     if (itemInLocal != null )
                     {
+                        itemInLocal.PresentInServer = true;
                         if (remoteItem.Type == ItemType.File)
                         {
                             itemInLocal.HasDifference = itemInLocal.FileSize != remoteItem.FileSize && itemInLocal.LastModifiedTime != remoteItem.LastModifiedTime;
@@ -30,9 +31,10 @@ namespace FolderSyncronizer.Business
                         if (localParent == null)
                             localParent = local;
 
-                        var newFileFolderItem = new FileFolderItem { DisplayName = remoteItem.ItemName, Parent = localParent};
-                        localParent.Children.Insert(remote.Children.IndexOf(remoteItem), newFileFolderItem );
+                        var newFileFolderItem = new FileFolderItem { DisplayName = remoteItem.ItemName, Parent = localParent, Type = remoteItem.Type, PresentInServer=true};
+                        localParent.Children.Insert(remote.Children.IndexOf(remoteItem), newFileFolderItem);
                         newFileFolderItem.HasDifference = true;
+                        
                     }
                     
                     if(remoteItem.Type == ItemType.Folder)

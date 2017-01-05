@@ -64,7 +64,8 @@ namespace FolderSyncronizer.ViewModel
             if(path== null || path == "LocalFolderPath")
             {
                 IFolderBrowser browser = new FolderBrowser(Settings.LocalFolderPath);
-                LocalFileFolderItem = new ObservableCollection<FileFolderItem> { browser.GetFileFolderItem() };
+                FileFolderItem item = browser.GetFileFolderItem();
+                LocalFileFolderItem = new ObservableCollection<FileFolderItem> { item };
                 if (RemoteFileFolderItem != null && RemoteFileFolderItem.Count() == 1)
                     Curator.Curate(LocalFileFolderItem[0], RemoteFileFolderItem[0]);
             }
@@ -72,7 +73,8 @@ namespace FolderSyncronizer.ViewModel
             if(path == null || path == "RemoteFolderPath")
             {
                 IFolderBrowser browser = new FolderBrowser(Settings.RemoteFolderPath);
-                RemoteFileFolderItem = new ObservableCollection<FileFolderItem> { browser.GetFileFolderItem() };
+                FileFolderItem item = browser.GetFileFolderItem();
+                RemoteFileFolderItem = new ObservableCollection<FileFolderItem> { item };
                 if (LocalFileFolderItem != null && LocalFileFolderItem.Count() == 1)
                     Curator.Curate(LocalFileFolderItem[0], RemoteFileFolderItem[0]);
             }

@@ -79,6 +79,14 @@ namespace FolderSyncronizer.DataModel
         {
             get
             {
+                if (Type == ItemType.Folder)
+                {
+                    m_FileSize = 0;
+                    foreach (var child in Children)
+                    {
+                        m_FileSize += child.FileSize;
+                    }
+                }
                 return m_FileSize;
             }
             set
@@ -103,15 +111,37 @@ namespace FolderSyncronizer.DataModel
                     if (m_HasDifference)
                         break;
                 }
+                
                 return m_HasDifference;
             }
             set
             {
                 m_HasDifference = value;
                 OnPropertyChanged("HasDifference");
-                OnPropertyChanged("IsEqual"); // We raise it here because Is Equal is derived from this proeprty.
+                OnPropertyChanged("ShowEqual"); // We raise it here because Is Equal is derived from this proeprty.
             }
 
+        }
+
+        private bool m_PresentInServer = false;
+        public bool PresentInServer
+        {
+            get
+            {
+                return m_PresentInServer;
+            }
+            set
+            {
+                m_PresentInServer = value;
+            }
+        }
+
+        public bool ShowEqual
+        {
+            get
+            {
+                return PresentInServer && IsEqual;
+            }
         }
 
         public bool IsEqual
@@ -233,13 +263,13 @@ namespace FolderSyncronizer.DataModel
         }
 
     
-
         public void Copy(FileFolderItem remote)
         {
             if (this.HasDifference)
             {
-                if (this.Children.Count() == 0 && !this.IsCopyInProgress)
+                if (this.Type == ItemType.File && !this.IsCopyInProgress)
                 {
+                    Parent.CreateIfNotExist();
                     BackgroundWorker copyWorker = new BackgroundWorker();
                     copyWorker.RunWorkerCompleted += CopyWorker_RunWorkerCompleted;
                     copyWorker.DoWork += CopyWorker_DoWork;
@@ -249,10 +279,7 @@ namespace FolderSyncronizer.DataModel
                 }
                 else
                 {
-
-                    if (!System.IO.Directory.Exists(this.ItemPath))
-                        System.IO.Directory.CreateDirectory(this.ItemPath);
-
+                    CreateIfNotExist();
                     foreach (var child in remote.Children)
                     {
                         var localItem = this.GetItem(child.RelativePath);
@@ -263,6 +290,22 @@ namespace FolderSyncronizer.DataModel
             }
         }
 
+        public void CreateIfNotExist()
+        {
+            //Return if Folder Exists Already
+            if (System.IO.Directory.Exists(ItemPath))
+                return;
+
+            //Check for the Parent directory first
+            if(this.Parent!= null)
+                this.Parent.CreateIfNotExist();
+
+            //Create the folder
+            System.IO.Directory.CreateDirectory(ItemPath);
+            HasDifference = false;
+        }
+
+
         private void CopyWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             this.IsCopyInProgress = false;
@@ -270,7 +313,7 @@ namespace FolderSyncronizer.DataModel
             System.IO.FileInfo info = new System.IO.FileInfo(this.ItemPath);
             this.DisplayName = info.Name;
             this.LastModifiedTime = info.LastWriteTime;
-            this.FileSize = info.Length / 1024;
+            this.FileSize = info.Length;
         }
 
         private void CopyWorker_DoWork(object sender, DoWorkEventArgs e)

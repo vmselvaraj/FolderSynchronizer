@@ -7,6 +7,7 @@
         xmlns:local="clr-namespace:FolderSyncronizer"
         xmlns:model="clr-namespace:FolderSyncronizer.DataModel"
         xmlns:controladv="clr-namespace:FolderSyncronizer.Controls"
+        xmlns:business="clr-namespace:FolderSyncronizer.Business"
         mc:Ignorable="d"
         Title="Syncronizer" Height="650" Width="1000"
         ShowTitleBar="False"
@@ -17,6 +18,7 @@
         WindowState="Maximized" Icon="appicon.ico">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <business:FileSizeRepresenter x:Key="fileSizeRepresenter" />
 
         <Style x:Key="ExpandCollapseToggleStyle"
            TargetType="{x:Type ToggleButton}">
@@ -188,7 +190,7 @@
             </StackPanel>
 
         </Grid>
-        <Grid Grid.Row="1"  Background="{StaticResource AccentColorBrush}">
+        <Grid Grid.Row="1"  Background="{StaticResource AccentColorBrush}" Margin="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -264,7 +266,7 @@
                         <GridViewColumn Header="File Size" Width="100">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding FileSize}" Margin="5,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                                        <TextBlock Text="{Binding FileSize, Converter={StaticResource fileSizeRepresenter}}" Margin="5,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -279,8 +281,8 @@
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                                        <Ellipse Width="10" Height="10" ToolTip="Equal" Cursor="Hand" Fill="#8BC34A" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding IsEqual , Converter={StaticResource BoolToVis}}"/>
-                                        <Button x:Name="updateBtn" Style="{DynamicResource MetroCircleButtonStyle}" Background="{DynamicResource AccentColorBrush}" Cursor="Hand" Width="25" Height="25" Visibility="{Binding HasDifference, Converter={StaticResource BoolToVis}}" ToolTip="Update" Tag="{Binding RelativePath}" Click="updateBtn_Click">
+                                        <Ellipse Width="10" Height="10" ToolTip="Equal" Cursor="Hand" Fill="#8BC34A" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding ShowEqual , Converter={StaticResource BoolToVis}}"/>
+                                        <Button x:Name="updateBtn" Style="{DynamicResource MetroCircleButtonStyle}" Background="{DynamicResource AccentColorBrush}" BorderBrush="White" Cursor="Hand" Width="25" Height="25" Visibility="{Binding HasDifference, Converter={StaticResource BoolToVis}}" ToolTip="Update" Tag="{Binding RelativePath}" Click="updateBtn_Click">
                                             <Viewbox Width="10" Height="10">
                                                 <Canvas Width="24" Height="24">
                                                     <Path Data="M20,10V14H11L14.5,17.5L12.08,19.92L4.16,12L12.08,4.08L14.5,6.5L11,10H20Z" Fill="White" />
@@ -311,7 +313,7 @@
                         <GridViewColumn Header="File Size" Width="100">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding FileSize}" Margin="5,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                                        <TextBlock Text="{Binding FileSize, Converter={StaticResource fileSizeRepresenter}}" Margin="5,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>

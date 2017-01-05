@@ -39,7 +39,7 @@ namespace FolderSyncronizer.Controller
                 fileItem.DisplayName = fileInfo.Name;
                 fileItem.Type = ItemType.File;
                 fileItem.LastModifiedTime = fileInfo.LastWriteTime;
-                fileItem.FileSize = fileInfo.Length / 1024;
+                fileItem.FileSize = fileInfo.Length;
                 fileItem.Parent = fileFolderItem;
                 fileFolderItem.Children.Add(fileItem);
 
