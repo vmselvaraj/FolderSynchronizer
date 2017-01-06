@@ -66,15 +66,6 @@ namespace FolderSyncronizer.DataModel
         {
             get
             {
-                if (this.Type == ItemType.Folder)
-                {
-                    if (Directory.Exists(this.ItemPath))
-                    {
-                        DirectoryInfo dInfo = new DirectoryInfo(this.ItemPath);
-                        m_LastModifiedTime = dInfo.LastWriteTime;
-                    }
-                }
-
                 return m_LastModifiedTime;
             }
             set
@@ -316,6 +307,18 @@ namespace FolderSyncronizer.DataModel
             //Create the folder
             System.IO.Directory.CreateDirectory(ItemPath);
             HasDifference = false;
+        }
+
+        public void SortAlphabetically()
+        {
+            this.Children = new ObservableCollection<FileFolderItem>(this.Children.OrderBy(x => x.ItemName).OrderBy(x => x.Type.ToString()));
+            m_Children.CollectionChanged += Children_CollectionChanged;   //Re-Subscribe
+            var loopresult = Parallel.ForEach(Children, child =>
+            {
+                child.SortAlphabetically();
+            });
+
+            while (!loopresult.IsCompleted) { }; //Wait till all items are iterated
         }
 
 

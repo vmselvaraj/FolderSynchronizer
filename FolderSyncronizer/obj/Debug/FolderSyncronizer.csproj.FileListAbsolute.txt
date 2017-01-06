@@ -41,3 +41,4 @@ C:\Users\venkatesh.selvaraj\Documents\GitHub\FolderSynchronizer\FolderSyncronize
 C:\Users\venkatesh.selvaraj\Documents\GitHub\FolderSynchronizer\FolderSyncronizer\obj\Debug\FolderSyncronizer.g.resources
 C:\Users\venkatesh.selvaraj\Documents\GitHub\FolderSynchronizer\FolderSyncronizer\obj\Debug\FolderSyncronizer.Properties.Resources.resources
 C:\Users\venkatesh.selvaraj\Documents\GitHub\FolderSynchronizer\FolderSyncronizer\obj\Debug\FolderSyncronizer.csproj.GenerateResource.Cache
+C:\Users\venkatesh.selvaraj\Documents\GitHub\FolderSynchronizer\FolderSyncronizer\obj\Debug\FolderSyncronizer.csprojResolveAssemblyReference.cache

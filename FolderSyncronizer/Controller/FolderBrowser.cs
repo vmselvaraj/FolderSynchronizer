@@ -18,50 +18,59 @@ namespace FolderSyncronizer.Controller
         public FileFolderItem GetFileFolderItem()
         {
             FileFolderItem rootDirectoryItem = null;
-            DirectoryInfo rootDirectoryInfo = new DirectoryInfo(FolderPath);
             rootDirectoryItem = new FileFolderItem
             {
                 ItemPath = FolderPath,
-                DisplayName = rootDirectoryInfo.Name,
+                DisplayName = Path.GetFileName(FolderPath),
                 Type = ItemType.Folder,
                 Parent = null,
             };
-            LoadFileFolderItems(rootDirectoryItem, rootDirectoryInfo);
+            LoadFileFolderItems(rootDirectoryItem, FolderPath);
             return rootDirectoryItem;
         }
 
-        private void LoadFileFolderItems(FileFolderItem fileFolderItem, DirectoryInfo directoryToBrowser)
+        private void LoadFileFolderItems(FileFolderItem fileFolderItem, string directoryToBrowse)
         {
-            FileInfo[] files = directoryToBrowser.GetFiles();
-            foreach(var fileInfo in files)
+            var parallelOptions = new ParallelOptions
             {
+                MaxDegreeOfParallelism = 2
+            };
+
+            string[] files = Directory.GetFiles(directoryToBrowse);
+            var fileLoopResult = Parallel.ForEach(files, parallelOptions, file => {
+                var fileInfo = new FileInfo(file);
                 FileFolderItem fileItem = new FileFolderItem();
                 fileItem.DisplayName = fileInfo.Name;
                 fileItem.Type = ItemType.File;
                 fileItem.LastModifiedTime = fileInfo.LastWriteTime;
                 fileItem.FileSize = fileInfo.Length;
                 fileItem.Parent = fileFolderItem;
-                fileFolderItem.Children.Add(fileItem);
-
-            }
-
-            DirectoryInfo[] directories = directoryToBrowser.GetDirectories();
-            foreach(var directoryInfo in directories)
-            {
+                AddChid(fileFolderItem, fileItem);
+            });
+            
+            
+            string[] directories = System.IO.Directory.GetDirectories(directoryToBrowse);
+            var folderLoopResult = Parallel.ForEach(directories, parallelOptions, directory => {
                 FileFolderItem directoryItem = new FileFolderItem
                 {
-                    DisplayName = directoryInfo.Name,
+                    DisplayName = Path.GetFileName(directory),
                     Type = ItemType.Folder,
-                    LastModifiedTime = directoryInfo.LastWriteTime,
                 };
 
                 directoryItem.Parent = fileFolderItem;
-                fileFolderItem.Children.Add(directoryItem);
+                AddChid(fileFolderItem, directoryItem);
+                LoadFileFolderItems(directoryItem, directory);
+            });
 
-                LoadFileFolderItems(directoryItem, directoryInfo);
-            }
+            while(!fileLoopResult.IsCompleted || !folderLoopResult.IsCompleted) { } //Wait till both the results completed.
         }
 
-        
+        private void AddChid(FileFolderItem parent, FileFolderItem item)
+        {
+            lock (parent)
+            {
+                parent.Children.Add(item);
+            }
+        }
     }
 }

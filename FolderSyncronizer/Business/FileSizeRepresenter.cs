@@ -15,7 +15,9 @@ namespace FolderSyncronizer.Business
             if (value != null && value.GetType() == typeof(long))
             {
                 long sizeInBytes = (long)value;
-                if (sizeInBytes < 1024)
+                if (sizeInBytes == 0)
+                    return string.Empty;
+                else if (sizeInBytes < 1024)
                     return sizeInBytes + " Bytes";
                 else if (sizeInBytes < 1048576)
                     return sizeInBytes / 1024 + " KB";

@@ -113,6 +113,9 @@ namespace FolderSyncronizer
 
         private void ExpandOrCollapse(string sourceEvent, object originalSource, bool isExpanded)
         {
+            if (ViewModel.RemoteFileFolderItem == null || ViewModel.LocalFileFolderItem == null)
+                return;
+
             FileFolderItem eventOrginateditem = ((TreeViewItem)originalSource).DataContext as FileFolderItem;
             FileFolderItem equivalentSibilingFolder = null;
             TreeListViewItem equivalentSibilingTreeViewItem;
