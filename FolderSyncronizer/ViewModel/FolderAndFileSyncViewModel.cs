@@ -56,29 +56,28 @@ namespace FolderSyncronizer.ViewModel
         {
             ValidateConfiguration();
             SettingsIO.PersistSettings(Settings);
-            LoadFolderTree(e.PropertyName);
+            LoadFolderTree();
         }
 
-        private void LoadFolderTree(string path = null)
+        private void LoadFolderTree()
         {
-            if(path== null || path == "LocalFolderPath")
-            {
-                IFolderBrowser browser = new FolderBrowser(Settings.LocalFolderPath);
-                FileFolderItem item = browser.GetFileFolderItem();
-                LocalFileFolderItem = new ObservableCollection<FileFolderItem> { item };
-                if (RemoteFileFolderItem != null && RemoteFileFolderItem.Count() == 1)
-                    Curator.Curate(LocalFileFolderItem[0], RemoteFileFolderItem[0]);
-            }
-            
-            if(path == null || path == "RemoteFolderPath")
-            {
-                IFolderBrowser browser = new FolderBrowser(Settings.RemoteFolderPath);
-                FileFolderItem item = browser.GetFileFolderItem();
-                RemoteFileFolderItem = new ObservableCollection<FileFolderItem> { item };
-                if (LocalFileFolderItem != null && LocalFileFolderItem.Count() == 1)
-                    Curator.Curate(LocalFileFolderItem[0], RemoteFileFolderItem[0]);
-            }
-                
+            if (string.IsNullOrEmpty(Settings.LocalFolderPath) || string.IsNullOrEmpty(Settings.RemoteFolderPath))
+                return;
+
+            FileFolderItem local = GetFileFolderItem(Settings.LocalFolderPath);
+            FileFolderItem remote = GetFileFolderItem(Settings.RemoteFolderPath);
+
+            Curator.Curate(local, remote);
+            Curator.RemoveNonExistingLocalItem(local);
+
+            LocalFileFolderItem = new ObservableCollection<FileFolderItem> { local };
+            RemoteFileFolderItem = new ObservableCollection<FileFolderItem> { remote };
+        }
+
+        private FileFolderItem GetFileFolderItem(string path)
+        {
+            IFolderBrowser browser = new FolderBrowser(path);
+            return browser.GetFileFolderItem();
         }
 
         #region INotifyPropertyChanged Implementation

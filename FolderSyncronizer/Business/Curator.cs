@@ -23,6 +23,14 @@ namespace FolderSyncronizer.Business
                         {
                             itemInLocal.HasDifference = itemInLocal.FileSize != remoteItem.FileSize && itemInLocal.LastModifiedTime != remoteItem.LastModifiedTime;
                         }
+
+                        int localIOrderIndex = itemInLocal.Parent.Children.IndexOf(itemInLocal);
+                        int remoteOrderIndex = remote.Children.IndexOf(remoteItem);
+
+                        if (localIOrderIndex != remoteOrderIndex)
+                        {
+                            itemInLocal.Parent.Children.Move(localIOrderIndex, remoteOrderIndex);
+                        }
                     }
                     else
                     {
@@ -41,6 +49,25 @@ namespace FolderSyncronizer.Business
                         Curate(local, remoteItem);
                 }
             }            
+        }
+
+        public static void RemoveNonExistingLocalItem(FileFolderItem item)
+        {
+            for (int i = 0; i < item.Children.Count();)
+            {
+                var child = item.Children[i];
+                if (!child.PresentInServer)
+                {
+                    item.Children.RemoveAt(i);
+                    continue;
+                }
+                else
+                {
+                    if (child.Type == ItemType.Folder)
+                        RemoveNonExistingLocalItem(child);
+                    i += 1;
+                }
+            }
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -65,6 +66,15 @@ namespace FolderSyncronizer.DataModel
         {
             get
             {
+                if (this.Type == ItemType.Folder)
+                {
+                    if (Directory.Exists(this.ItemPath))
+                    {
+                        DirectoryInfo dInfo = new DirectoryInfo(this.ItemPath);
+                        m_LastModifiedTime = dInfo.LastWriteTime;
+                    }
+                }
+
                 return m_LastModifiedTime;
             }
             set
@@ -84,7 +94,8 @@ namespace FolderSyncronizer.DataModel
                     m_FileSize = 0;
                     foreach (var child in Children)
                     {
-                        m_FileSize += child.FileSize;
+                        if (child.FileSize != null)
+                            m_FileSize += child.FileSize;
                     }
                 }
                 return m_FileSize;
@@ -195,11 +206,13 @@ namespace FolderSyncronizer.DataModel
 
         private void Children_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            foreach(FileFolderItem newItem in e.NewItems)
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                newItem.PropertyChanged += NewItem_PropertyChanged;
+                foreach (FileFolderItem newItem in e.NewItems)
+                {
+                    newItem.PropertyChanged += NewItem_PropertyChanged;
+                }
             }
-               
         }
 
         private void NewItem_PropertyChanged(object sender, PropertyChangedEventArgs e)

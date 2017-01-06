@@ -29,7 +29,6 @@ C:\Users\venkatesh.selvaraj\Documents\GitHub\FolderSynchronizer\FolderSyncronize
 C:\Users\venkatesh.selvaraj\Documents\GitHub\FolderSynchronizer\FolderSyncronizer\bin\Debug\System.Windows.Interactivity.dll
 C:\Users\venkatesh.selvaraj\Documents\GitHub\FolderSynchronizer\FolderSyncronizer\bin\Debug\MahApps.Metro.pdb
 C:\Users\venkatesh.selvaraj\Documents\GitHub\FolderSynchronizer\FolderSyncronizer\bin\Debug\MahApps.Metro.xml
-C:\Users\venkatesh.selvaraj\Documents\GitHub\FolderSynchronizer\FolderSyncronizer\obj\Debug\FolderSyncronizer.csprojResolveAssemblyReference.cache
 C:\Users\venkatesh.selvaraj\Documents\GitHub\FolderSynchronizer\FolderSyncronizer\obj\Debug\Resources\Icons.baml
 C:\Users\venkatesh.selvaraj\Documents\GitHub\FolderSynchronizer\FolderSyncronizer\obj\Debug\Resources\IconsNonShared.baml
 C:\Users\venkatesh.selvaraj\Documents\GitHub\FolderSynchronizer\FolderSyncronizer\obj\Debug\MainWindow.g.cs

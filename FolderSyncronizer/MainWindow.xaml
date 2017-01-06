@@ -71,6 +71,7 @@
 
 
         <Style TargetType="{x:Type controladv:TreeListViewItem}">
+            <Setter Property="IsExpanded" Value="True" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="Template">
                 <Setter.Value>
@@ -298,7 +299,7 @@
                     <TreeView.ItemTemplate>
 
                         <HierarchicalDataTemplate DataType="{x:Type model:FileFolderItem}" ItemsSource="{Binding Children}">
-                            <controladv:TreeListViewItem/>
+                            <controladv:TreeListViewItem />
                         </HierarchicalDataTemplate>
 
                     </TreeView.ItemTemplate>
