@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RoboSharp;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -142,7 +143,8 @@ namespace FolderSyncronizer.DataModel
         {
             get
             {
-                return PresentInServer && IsEqual;
+                
+                return !IsCopyInProgress && PresentInServer && IsEqual;
             }
         }
 
@@ -294,6 +296,30 @@ namespace FolderSyncronizer.DataModel
             }
         }
 
+        private void CopyWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            this.IsCopyInProgress = false;
+            this.HasDifference = false;
+            System.IO.FileInfo info = new System.IO.FileInfo(this.ItemPath);
+            this.DisplayName = info.Name;
+            this.LastModifiedTime = info.LastWriteTime;
+            this.FileSize = info.Length;
+        }
+
+        private double m_FileCopyProgress = 0;
+        public double FileCopyProgress
+        {
+            get
+            {
+                return m_FileCopyProgress;
+            }
+            set
+            {
+                m_FileCopyProgress = value;
+                OnPropertyChanged("FileCopyProgress");
+            }
+        }
+
         public void CreateIfNotExist()
         {
             //Return if Folder Exists Already
@@ -321,28 +347,41 @@ namespace FolderSyncronizer.DataModel
             while (!loopresult.IsCompleted) { }; //Wait till all items are iterated
         }
 
-
-        private void CopyWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            this.IsCopyInProgress = false;
-            this.HasDifference = false;
-            System.IO.FileInfo info = new System.IO.FileInfo(this.ItemPath);
-            this.DisplayName = info.Name;
-            this.LastModifiedTime = info.LastWriteTime;
-            this.FileSize = info.Length;
-        }
-
         private void CopyWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             string remotePath = e.Argument as string;
             try
             {
-                System.IO.File.Copy(remotePath, this.ItemPath, true);
+                RoboCommand copyCommand = new RoboCommand();
+                //events
+                copyCommand.OnCopyProgressChanged += CopyCommand_OnCopyProgressChanged;
+                // copy options
+                copyCommand.CopyOptions.Source = Path.GetDirectoryName(remotePath);
+                copyCommand.CopyOptions.Destination = Path.GetDirectoryName(this.ItemPath);
+                copyCommand.CopyOptions.FileFilter = this.ItemName;
+                copyCommand.CopyOptions.CopySubdirectories = false;
+                copyCommand.CopyOptions.UseUnbufferedIo = true;
+                
+                // select options
+                copyCommand.SelectionOptions.OnlyCopyArchiveFilesAndResetArchiveFlag = true;
+                // retry options
+                copyCommand.RetryOptions.RetryCount = 1;
+                copyCommand.RetryOptions.RetryWaitTime = 2;
+                Task startTask = copyCommand.Start();
+
+                while (!startTask.IsCompleted) { }
+                
+                //System.IO.File.Copy(remotePath, this.ItemPath, true);
             }
             catch
             {
 
             }
+        }
+
+        private void CopyCommand_OnCopyProgressChanged(object sender, CopyProgressEventArgs e)
+        {
+            FileCopyProgress =  e.CurrentFileProgress;
         }
 
         #endregion

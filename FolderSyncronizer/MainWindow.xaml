@@ -261,14 +261,14 @@
                     <Grid Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <StackPanel Orientation="Vertical">
                             <TextBlock Text="{Binding Status}" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="0" Grid.ColumnSpan="2" />
-                            <ProgressBar IsIndeterminate="True" Width="300" Margin="10" IsEnabled="{Binding ShowProgressBar}" Visibility="{Binding ShowProgressBar, Converter={StaticResource BoolToVis}}"/>
+                            <ProgressBar IsIndeterminate="True" Width="300" Margin="10" IsEnabled="{Binding ShowProgressBar}" />
                         </StackPanel>
                     </Grid>
                     <controladv:TreeListView x:Name="localFolderAndFileViewControl" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Visibility="{Binding Path=FolderAndFileViewControVisibility, Converter={StaticResource BoolToVis}}" Grid.Column="0"
                       Background="Gray" ItemsSource="{Binding LocalFileFolderItem}" ScrollViewer.VerticalScrollBarVisibility="Hidden" FontFamily="Calibiri" FontSize="12"  BorderThickness="1,1,0,1"
                       TreeViewItem.Expanded="localFolderAndFileViewControl_Expanded" TreeViewItem.Collapsed="localFolderAndFileViewControl_Collapsed">
                     <controladv:TreeListView.Columns>
-                        <GridViewColumn Header="Item Name" CellTemplate="{StaticResource CellTemplate_Name}"  Width="450"/>
+                        <GridViewColumn Header="Item Name" CellTemplate="{StaticResource CellTemplate_Name}"  Width="400"/>
                         <GridViewColumn Header="File Size" Width="100">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
@@ -283,7 +283,7 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Header="" Width="70">
+                        <GridViewColumn Header="" Width="150">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
@@ -295,7 +295,11 @@
                                                 </Canvas>
                                             </Viewbox>
                                         </Button>
-                                        <ProgressBar Width="25"  Height="10" IsIndeterminate="True" IsEnabled="{Binding IsCopyInProgress}" Visibility="{Binding IsCopyInProgress, Converter={StaticResource BoolToVis}}" />
+                                            <StackPanel Orientation="Horizontal"  Visibility="{Binding IsCopyInProgress, Converter={StaticResource BoolToVis}}">
+                                                <TextBlock Text="{Binding FileCopyProgress}" FontFamily="Calibiri" VerticalAlignment="Center" />
+                                                <TextBlock Text=" %" Margin="0,0,5,0"  FontFamily="Caliibri" VerticalAlignment="Center"/>
+                                                <ProgressBar Width="25"  Height="10" IsIndeterminate="True" IsEnabled="{Binding IsCopyInProgress}" />
+                                            </StackPanel>
                                     </Grid>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
