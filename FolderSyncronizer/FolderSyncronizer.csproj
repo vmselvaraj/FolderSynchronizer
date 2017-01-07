@@ -69,7 +69,9 @@
     </ApplicationDefinition>
     <Compile Include="Business\Curator.cs" />
     <Compile Include="Business\FileSizeRepresenter.cs" />
+    <Compile Include="Business\RegularExpressions.cs" />
     <Compile Include="Business\SettingsIO.cs" />
+    <Compile Include="Controller\CommandLineFolderBrowser.cs" />
     <Compile Include="Controller\FolderBrowser.cs" />
     <Compile Include="Controller\FtpServerBrowser.cs" />
     <Compile Include="Controller\IFolderBrowser.cs" />

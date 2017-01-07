@@ -120,7 +120,7 @@ namespace FolderSyncronizer.ViewModel
 
         private FileFolderItem GetFileFolderItem(string path)
         {
-            IFolderBrowser browser = new FolderBrowser(path);
+            IFolderBrowser browser = new CommandLineFolderBrowser(path);
             return browser.GetFileFolderItem();
         }
 
