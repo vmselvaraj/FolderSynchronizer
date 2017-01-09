@@ -64,12 +64,21 @@ namespace FolderSyncronizer.ViewModel
             if (string.IsNullOrEmpty(Settings.LocalFolderPath) ||
                 string.IsNullOrEmpty(Settings.RemoteFolderPath) ||
                 Settings.LocalFolderPath == ".." ||
-                Settings.RemoteFolderPath == ".."
-                )
+                Settings.RemoteFolderPath == "..")
                 return;
 
-            FolderAndFileViewControVisibility = false;
+
             ShowProgressBar = true;
+            FolderAndFileViewControVisibility = false;
+
+            Status = string.Empty;
+            if (!string.IsNullOrEmpty(Settings.FolderExistanceErrorMessage))
+            {
+                Status = Settings.FolderExistanceErrorMessage;
+                ShowProgressBar = false;
+                return;
+            }
+           
             BackgroundWorker bg = new BackgroundWorker();
             bg.WorkerReportsProgress = true;
             bg.RunWorkerCompleted += Bg_RunWorkerCompleted;
@@ -193,7 +202,9 @@ namespace FolderSyncronizer.ViewModel
                     status += " and Remote Folder Path";
             }
 
-            Status = status;
+            if(!string.IsNullOrEmpty(status))
+                Status = status;
+
             return !String.IsNullOrEmpty(Status);
         }
 

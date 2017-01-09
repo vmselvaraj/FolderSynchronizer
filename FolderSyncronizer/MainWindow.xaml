@@ -261,7 +261,7 @@
                     <Grid Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <StackPanel Orientation="Vertical">
                             <TextBlock Text="{Binding Status}" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="0" Grid.ColumnSpan="2" />
-                            <ProgressBar IsIndeterminate="True" Width="300" Margin="10" IsEnabled="{Binding ShowProgressBar}" />
+                            <ProgressBar IsIndeterminate="True" Width="300" Margin="10" IsEnabled="{Binding ShowProgressBar}" Visibility="{Binding ShowProgressBar, Converter={StaticResource BoolToVis}}" />
                         </StackPanel>
                     </Grid>
                     <controladv:TreeListView x:Name="localFolderAndFileViewControl" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Visibility="{Binding Path=FolderAndFileViewControVisibility, Converter={StaticResource BoolToVis}}" Grid.Column="0"

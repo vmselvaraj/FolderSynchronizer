@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace FolderSyncronizer.DataModel
 {
@@ -37,6 +38,49 @@ namespace FolderSyncronizer.DataModel
                 OnPropertyChanged("RemoteFolderPath");
             }
         }
+
+        [XmlIgnore]
+        public bool IsLocalFolderExists
+        {
+            get
+            {
+                return System.IO.Directory.Exists(LocalFolderPath);
+            }
+        }
+
+        [XmlIgnore]
+        public bool IsRemoteFolderExisits
+        {
+            get
+            {
+                return System.IO.Directory.Exists(RemoteFolderPath);
+            }
+        }
+
+
+        public string FolderExistanceErrorMessage
+        {
+            get
+            {
+                string errorMessage = string.Empty;
+                if (!IsLocalFolderExists)
+                    errorMessage = "Local Folder";
+
+                if (!IsRemoteFolderExisits)
+                {
+                    errorMessage += !string.IsNullOrEmpty(errorMessage) ? " & " : "";
+                    errorMessage += "Remote Folder";
+                }
+
+                if(!string.IsNullOrEmpty(errorMessage))
+                {
+                    errorMessage += " does not exist";
+                }
+
+                return errorMessage;
+            }
+        }
+
 
         private void OnPropertyChanged(string propertyName)
         {
