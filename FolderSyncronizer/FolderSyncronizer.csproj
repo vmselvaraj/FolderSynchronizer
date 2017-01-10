@@ -76,6 +76,7 @@
     <Compile Include="Business\FileProgressRepresenter.cs" />
     <Compile Include="Business\FileSizeRepresenter.cs" />
     <Compile Include="Business\RegularExpressions.cs" />
+    <Compile Include="Business\RoboCopy.cs" />
     <Compile Include="Business\SettingsIO.cs" />
     <Compile Include="Controller\CommandLineFolderBrowser.cs" />
     <Compile Include="Controller\FolderBrowser.cs" />

@@ -402,7 +402,7 @@ namespace FolderSyncronizer.DataModel
                         var localItem = this.GetItem(child.RelativePath);
                         if (localItem != null)
                         {
-                            localItem.Copy(child);
+                            localItem.PrepareFileCopy(child, sequencer);
                         }
                     }
                 }
