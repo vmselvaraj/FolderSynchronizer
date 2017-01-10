@@ -296,7 +296,7 @@
                                                 </Canvas>
                                             </Viewbox>
                                         </Button>
-                                            <StackPanel Orientation="Horizontal"  Visibility="{Binding IsCopyInProgress, Converter={StaticResource BoolToVis}}">
+                                            <StackPanel Orientation="Horizontal"  Visibility="{Binding IsCopyInProgress, Converter={StaticResource BoolToVis}}" HorizontalAlignment="Center" VerticalAlignment="Center">
                                                 <TextBlock Text="{Binding FileCopyProgress, Converter={StaticResource fileCopyProgressRepresenter}}" FontFamily="Calibiri" VerticalAlignment="Center" />
                                                 <ProgressBar Width="25"  Height="10" IsIndeterminate="True" IsEnabled="{Binding IsCopyInProgress}" Margin="5,0,0,0" />
                                             </StackPanel>

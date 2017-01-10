@@ -72,6 +72,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Business\Curator.cs" />
+    <Compile Include="Business\FileCopySequencer.cs" />
     <Compile Include="Business\FileProgressRepresenter.cs" />
     <Compile Include="Business\FileSizeRepresenter.cs" />
     <Compile Include="Business\RegularExpressions.cs" />

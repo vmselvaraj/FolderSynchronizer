@@ -17,6 +17,7 @@ using System.Windows.Forms;
 using FolderSyncronizer.ViewModel;
 using FolderSyncronizer.Controls;
 using FolderSyncronizer.DataModel;
+using FolderSyncronizer.Business;
 
 namespace FolderSyncronizer
 {
@@ -173,7 +174,20 @@ namespace FolderSyncronizer
             var remoteItem = ViewModel.RemoteFileFolderItem[0].GetItem(pathToCopy);
             var localItem = ViewModel.LocalFileFolderItem[0].GetItem(pathToCopy);
 
-            localItem.Copy(remoteItem);
+            FileCopySequencer sequencer = new FileCopySequencer();
+            localItem.PrepareFileCopy(remoteItem, sequencer);
+            sequencer.OnFileCopyCompleted += Sequencer_OnFileCopyCompleted;
+            Task.Run(new Action(sequencer.StartCopy));
+        }
+
+        private void Sequencer_OnFileCopyCompleted(FileFolderItem destItem)
+        {
+            destItem.IsCopyInProgress = false;
+            destItem.HasDifference = false;
+            System.IO.FileInfo info = new System.IO.FileInfo(destItem.ItemPath);
+            destItem.DisplayName = info.Name;
+            destItem.LastModifiedTime = info.LastWriteTime;
+            destItem.FileSize = info.Length;
         }
     }
 }

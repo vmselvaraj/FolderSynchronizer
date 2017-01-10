@@ -1,4 +1,5 @@
-﻿using RoboSharp;
+﻿using FolderSyncronizer.Business;
+using RoboSharp;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -379,6 +380,32 @@ namespace FolderSyncronizer.DataModel
             catch
             {
 
+            }
+        }
+
+        public void PrepareFileCopy(FileFolderItem remote, FileCopySequencer sequencer)
+        {
+            if (this.HasDifference)
+            {
+                if (this.Type == ItemType.File && !this.IsCopyInProgress)
+                {
+                    Parent.CreateIfNotExist();
+                    sequencer.Add(remote, this);
+                    this.IsCopyInProgress = true;
+                    this.HasDifference = false;
+                }
+                else
+                {
+                    CreateIfNotExist();
+                    foreach (var child in remote.Children)
+                    {
+                        var localItem = this.GetItem(child.RelativePath);
+                        if (localItem != null)
+                        {
+                            localItem.Copy(child);
+                        }
+                    }
+                }
             }
         }
 
