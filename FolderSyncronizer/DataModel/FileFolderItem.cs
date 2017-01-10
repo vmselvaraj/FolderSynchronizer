@@ -290,7 +290,9 @@ namespace FolderSyncronizer.DataModel
                     {
                         var localItem = this.GetItem(child.RelativePath);
                         if (localItem != null)
+                        {
                             localItem.Copy(child);
+                        }
                     }
                 }
             }
@@ -352,26 +354,27 @@ namespace FolderSyncronizer.DataModel
             string remotePath = e.Argument as string;
             try
             {
-                RoboCommand copyCommand = new RoboCommand();
-                //events
-                copyCommand.OnCopyProgressChanged += CopyCommand_OnCopyProgressChanged;
-                // copy options
-                copyCommand.CopyOptions.Source = Path.GetDirectoryName(remotePath);
-                copyCommand.CopyOptions.Destination = Path.GetDirectoryName(this.ItemPath);
-                copyCommand.CopyOptions.FileFilter = this.ItemName;
-                copyCommand.CopyOptions.CopySubdirectories = false;
-                copyCommand.CopyOptions.UseUnbufferedIo = true;
-                
-                // select options
-                copyCommand.SelectionOptions.OnlyCopyArchiveFilesAndResetArchiveFlag = true;
-                // retry options
-                copyCommand.RetryOptions.RetryCount = 1;
-                copyCommand.RetryOptions.RetryWaitTime = 2;
-                Task startTask = copyCommand.Start();
+                //    RoboCommand copyCommand = new RoboCommand();
+                //    //events
+                //    copyCommand.OnCopyProgressChanged += CopyCommand_OnCopyProgressChanged;
+                //    // copy options
+                //    copyCommand.CopyOptions.Source = Path.GetDirectoryName(remotePath);
+                //    copyCommand.CopyOptions.Destination = Path.GetDirectoryName(this.ItemPath);
+                //    copyCommand.CopyOptions.FileFilter = this.ItemName;
+                //    copyCommand.CopyOptions.CopySubdirectories = false;
+                //    copyCommand.CopyOptions.UseUnbufferedIo = true;
 
-                while (!startTask.IsCompleted) { }
-                
-                //System.IO.File.Copy(remotePath, this.ItemPath, true);
+                //    // select options
+                //    copyCommand.SelectionOptions.OnlyCopyArchiveFilesAndResetArchiveFlag = true;
+                //    // retry options
+                //    copyCommand.RetryOptions.RetryCount = 1;
+                //    copyCommand.RetryOptions.RetryWaitTime = 2;
+                //    Task startTask = copyCommand.Start();
+
+                //    while (!startTask.IsCompleted) { }
+
+                                
+                System.IO.File.Copy(remotePath, this.ItemPath, true);
             }
             catch
             {

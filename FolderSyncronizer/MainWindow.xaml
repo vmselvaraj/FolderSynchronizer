@@ -19,6 +19,7 @@
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <business:FileSizeRepresenter x:Key="fileSizeRepresenter" />
+        <business:FileCopyProgressRepresenter x:Key="fileCopyProgressRepresenter" />
 
         <Style x:Key="ExpandCollapseToggleStyle"
            TargetType="{x:Type ToggleButton}">
@@ -296,9 +297,8 @@
                                             </Viewbox>
                                         </Button>
                                             <StackPanel Orientation="Horizontal"  Visibility="{Binding IsCopyInProgress, Converter={StaticResource BoolToVis}}">
-                                                <TextBlock Text="{Binding FileCopyProgress}" FontFamily="Calibiri" VerticalAlignment="Center" />
-                                                <TextBlock Text=" %" Margin="0,0,5,0"  FontFamily="Caliibri" VerticalAlignment="Center"/>
-                                                <ProgressBar Width="25"  Height="10" IsIndeterminate="True" IsEnabled="{Binding IsCopyInProgress}" />
+                                                <TextBlock Text="{Binding FileCopyProgress, Converter={StaticResource fileCopyProgressRepresenter}}" FontFamily="Calibiri" VerticalAlignment="Center" />
+                                                <ProgressBar Width="25"  Height="10" IsIndeterminate="True" IsEnabled="{Binding IsCopyInProgress}" Margin="5,0,0,0" />
                                             </StackPanel>
                                     </Grid>
                                 </DataTemplate>
