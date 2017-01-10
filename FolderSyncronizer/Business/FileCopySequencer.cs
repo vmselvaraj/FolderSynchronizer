@@ -31,32 +31,32 @@ namespace FolderSyncronizer.Business
         {
             foreach(var source in itemsToCopy.Keys)
             {
-                while(isCopyInProgress)
-                {
-                    Thread.Sleep(100);
-                }
+                //while(isCopyInProgress)
+                //{
+                //    Thread.Sleep(100);
+                //}
 
-                isCopyInProgress = true;
+                //isCopyInProgress = true;
                 var dest = itemsToCopy[source];
 
-                RoboCommand copyCommand = new RoboCommand();
-                //events
-                copyCommand.OnCopyProgressChanged += CopyCommand_OnCopyProgressChanged;
-                // copy options
-                copyCommand.CopyOptions.Source = Path.GetDirectoryName(source.ItemPath);
-                copyCommand.CopyOptions.Destination = Path.GetDirectoryName(dest.ItemPath);
-                copyCommand.CopyOptions.FileFilter = dest.ItemName;
-                copyCommand.CopyOptions.CopySubdirectories = false;
-                copyCommand.CopyOptions.UseUnbufferedIo = true;
+                //RoboCommand copyCommand = new RoboCommand();
+                ////events
+                //copyCommand.OnCopyProgressChanged += CopyCommand_OnCopyProgressChanged;
+                //// copy options
+                //copyCommand.CopyOptions.Source = Path.GetDirectoryName(source.ItemPath);
+                //copyCommand.CopyOptions.Destination = Path.GetDirectoryName(dest.ItemPath);
+                //copyCommand.CopyOptions.FileFilter = dest.ItemName;
+                //copyCommand.CopyOptions.CopySubdirectories = false;
+                //copyCommand.CopyOptions.UseUnbufferedIo = true;
 
-                // select options
-                copyCommand.SelectionOptions.OnlyCopyArchiveFilesAndResetArchiveFlag = true;
-                // retry options
-                copyCommand.RetryOptions.RetryCount = 1;
-                copyCommand.RetryOptions.RetryWaitTime = 2;
-                Task startTask = copyCommand.Start();
-                
-                //System.IO.File.Copy(source.ItemPath, dest.ItemPath, true);
+                //// select options
+                //copyCommand.SelectionOptions.OnlyCopyArchiveFilesAndResetArchiveFlag = true;
+                //// retry options
+                //copyCommand.RetryOptions.RetryCount = 1;
+                //copyCommand.RetryOptions.RetryWaitTime = 2;
+                //Task startTask = copyCommand.Start();
+
+                System.IO.File.Copy(source.ItemPath, dest.ItemPath, true);
                 RaiseEvent(dest);
             }
         }
