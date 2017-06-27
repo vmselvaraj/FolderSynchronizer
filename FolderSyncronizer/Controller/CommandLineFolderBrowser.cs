@@ -14,6 +14,8 @@ namespace FolderSyncronizer.Controller
     public class CommandLineFolderBrowser : IFolderBrowser
     {
         private string FolderPath { get; set; }
+        public event BrowsePathChangedDelegate BrowsePatchChanged;
+
         public CommandLineFolderBrowser(string folderPath)
         {
             FolderPath = folderPath;
@@ -35,6 +37,9 @@ namespace FolderSyncronizer.Controller
 
         private void LoadFileFolderItems(FileFolderItem fileFolderItem)
         {
+            if (BrowsePatchChanged != null)
+                BrowsePatchChanged(fileFolderItem.ItemPath);
+
             ProcessStartInfo si = new ProcessStartInfo("cmd.exe");
             // Redirect both streams so we can write/read them.
             si.RedirectStandardInput = true;
@@ -52,11 +57,14 @@ namespace FolderSyncronizer.Controller
 
             ConvertCommandLineOutputToObject(fileFolderItem, output);
 
-            Parallel.ForEach(fileFolderItem.Children, child =>
+            var loop = Parallel.ForEach(fileFolderItem.Children, new ParallelOptions { MaxDegreeOfParallelism = 10 }, child =>
             {
                 if (child.Type == ItemType.Folder)
                     LoadFileFolderItems(child);
             });
+
+            //Wait for the loop to be completed
+            while (!loop.IsCompleted) { }
         }
 
         private void ConvertCommandLineOutputToObject(FileFolderItem parent, string output)
@@ -103,6 +111,7 @@ namespace FolderSyncronizer.Controller
             stream.Position = 0;
             return stream;
         }
+
 
     }
 }

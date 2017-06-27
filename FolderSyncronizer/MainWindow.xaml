@@ -9,13 +9,14 @@
         xmlns:controladv="clr-namespace:FolderSyncronizer.Controls"
         xmlns:business="clr-namespace:FolderSyncronizer.Business"
         mc:Ignorable="d"
-        Title="Syncronizer" Height="650" Width="1000"
-        ShowTitleBar="False"
+        Title="Folder Syncronizer" Height="650" Width="1000"
+        ShowTitleBar="True"
         BorderThickness="1" 
         GlowBrush="{DynamicResource AccentColorBrush}"
         ResizeMode="CanResizeWithGrip"
         WindowStartupLocation="CenterScreen"
-        WindowState="Maximized" Icon="appicon.ico">
+        WindowState="Maximized" Background="{StaticResource AccentColorBrush}">
+    
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <business:FileSizeRepresenter x:Key="fileSizeRepresenter" />
@@ -170,7 +171,7 @@
             </Setter>
         </Style>
     </Window.Resources>
-    <Border BorderBrush="Black" BorderThickness="1">
+    <Border BorderBrush="Black" BorderThickness="0">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -178,19 +179,18 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Background="{StaticResource AccentColorBrush}">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+        <Grid Grid.Row="0" Background="{StaticResource AccentColorBrush}" Margin="0,0,0,0">
+            <!--<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <Image Source="appicon.ico" Width="50" Height="50" Margin="5,0,5,0"/>
                 <Grid>
-                    <!--<Rectangle Width="90" Height="35" Fill="Black" Grid.Row="0" HorizontalAlignment="Left"/>
-                    <Rectangle Width="5" Height="35" Fill="{DynamicResource AccentColorBrush}" Grid.Row="0" HorizontalAlignment="Left" />-->
+                    --><!--<Rectangle Width="90" Height="35" Fill="Black" Grid.Row="0" HorizontalAlignment="Left"/>
+                    <Rectangle Width="5" Height="35" Fill="{DynamicResource AccentColorBrush}" Grid.Row="0" HorizontalAlignment="Left" />--><!--
                     <StackPanel Grid.Row="0" Orientation="Horizontal" >
                         <TextBlock Text="Folder" FontFamily="Calibiri" FontSize="25" Margin="5,12,3,10" Foreground="White" FontWeight="Bold" />
                         <TextBlock Text="synchronizer" FontFamily="Calibiri" FontSize="25" Margin="0,12,10,10" Foreground="White" />
                     </StackPanel>
                 </Grid>
-            </StackPanel>
-
+            </StackPanel>-->
         </Grid>
         <Grid Grid.Row="1"  Background="{StaticResource AccentColorBrush}" Margin="0">
             <Grid.RowDefinitions>
@@ -205,7 +205,7 @@
                         Margin="0, 0, 0, 0"
                         x:Name="localFolderSelectBtn"
                         Style="{DynamicResource MetroCircleButtonStyle}"
-                        Background="Gray"
+                        Background="{StaticResource AccentColorBrush}"
                         Cursor="Hand"
                         Click="localFolderSelectBtn_Click"
                         VerticalAlignment="Center">
@@ -227,7 +227,7 @@
                         Height="30"
                         Margin="0, 0, 0, 0"
                         Style="{DynamicResource MetroCircleButtonStyle}"
-                        Background="Gray"
+                        Background="{StaticResource AccentColorBrush}"
                         Cursor="Hand"
                         x:Name="remoteFolderSelectBtn"
                         Click="remoteFolderSelectBtn_Click"
@@ -244,7 +244,7 @@
                 </StackPanel>
             </StackPanel>
 
-            <Grid Grid.Row="1" Background="Gray">
+            <Grid Grid.Row="1" Background="{StaticResource AccentColorBrush}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="33*"/>
                     <ColumnDefinition Width="463*"/>
@@ -259,6 +259,11 @@
                     <ColumnDefinition Width="0.5*"/>
                     <ColumnDefinition Width="0.5*"/>
                 </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <ListBox x:Name="progressVerboseList" VerticalAlignment="Center" HorizontalAlignment="Right" Background="Transparent" Height="200" HorizontalContentAlignment="Left" ScrollViewer.VerticalScrollBarVisibility="Hidden"  ScrollViewer.HorizontalScrollBarVisibility="Hidden" Margin="0,0,15,0" Width="750" Opacity="0.5" Visibility="{Binding ShowProgressBar, Converter={StaticResource BoolToVis}}">
+                            
+                        </ListBox>
+                    </Grid>
                     <Grid Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <StackPanel Orientation="Vertical">
                             <TextBlock Text="{Binding Status}" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="0" Grid.ColumnSpan="2" />
@@ -266,7 +271,7 @@
                         </StackPanel>
                     </Grid>
                     <controladv:TreeListView x:Name="localFolderAndFileViewControl" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Visibility="{Binding Path=FolderAndFileViewControVisibility, Converter={StaticResource BoolToVis}}" Grid.Column="0"
-                      Background="Gray" ItemsSource="{Binding LocalFileFolderItem}" ScrollViewer.VerticalScrollBarVisibility="Hidden" FontFamily="Calibiri" FontSize="12"  BorderThickness="1,1,0,1"
+                      Background="White" ItemsSource="{Binding LocalFileFolderItem}" ScrollViewer.VerticalScrollBarVisibility="Hidden" FontFamily="Calibiri" FontSize="12"  BorderThickness="1,1,0,1"
                       TreeViewItem.Expanded="localFolderAndFileViewControl_Expanded" TreeViewItem.Collapsed="localFolderAndFileViewControl_Collapsed">
                     <controladv:TreeListView.Columns>
                         <GridViewColumn Header="Item Name" CellTemplate="{StaticResource CellTemplate_Name}"  Width="400"/>
@@ -316,7 +321,7 @@
                 </controladv:TreeListView>
 
                 <controladv:TreeListView x:Name="remoteFolderAndFileViewControl" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Visibility="{Binding Path=FolderAndFileViewControVisibility, Converter={StaticResource BoolToVis}}" Grid.Column="1"
-                    Background="Gray" ItemsSource="{Binding RemoteFileFolderItem}" ScrollViewer.VerticalScrollBarVisibility="Hidden" FontFamily="Calibiri" FontSize="12" BorderThickness="0,1,1,1"
+                    Background="White" ItemsSource="{Binding RemoteFileFolderItem}" ScrollViewer.VerticalScrollBarVisibility="Hidden" FontFamily="Calibiri" FontSize="12" BorderThickness="0,1,1,1"
                        TreeViewItem.Expanded="remoteFolderAndFileViewControl_Expanded" TreeViewItem.Collapsed="remoteFolderAndFileViewControl_Collapsed">
                     <controladv:TreeListView.Columns>
                         <GridViewColumn Header="Item Name" CellTemplate="{StaticResource CellTemplate_Name}"  Width="500"/>
@@ -337,11 +342,9 @@
 
                     </controladv:TreeListView.Columns>
                     <TreeView.ItemTemplate>
-
                         <HierarchicalDataTemplate DataType="{x:Type model:FileFolderItem}" ItemsSource="{Binding Children}">
                             <controladv:TreeListViewItem />
                         </HierarchicalDataTemplate>
-
                     </TreeView.ItemTemplate>
                 </controladv:TreeListView>
             </Grid>

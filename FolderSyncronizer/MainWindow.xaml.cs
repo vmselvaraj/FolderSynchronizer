@@ -35,10 +35,27 @@ namespace FolderSyncronizer
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             ViewModel = new FolderAndFileSyncViewModel();
+            ViewModel.BrowsePatchChanged += ViewModel_BrowsePatchChanged;
             localFolderAndFileViewControl.SelectedItemChanged += LocalFolderAndFileViewControl_SelectedItemChanged;
             remoteFolderAndFileViewControl.SelectedItemChanged += RemoteFolderAndFileViewControl_SelectedItemChanged;
         }
 
+        void ViewModel_BrowsePatchChanged(string path)
+        {
+            try
+            {
+                progressVerboseList.Invoke(() => progressVerboseList.Items.Insert(0, path));
+
+                if(progressVerboseList.Items.Count == 10)
+                {
+                    progressVerboseList.Invoke(() => progressVerboseList.Items.RemoveAt(9));
+                }
+            }
+            catch
+            {
+                //Just information to the user. Need not to worry about expection in this line of the code if occurrs.
+            }
+        }
 
         public FolderAndFileSyncViewModel ViewModel
         {

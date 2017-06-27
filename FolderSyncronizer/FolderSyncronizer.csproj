@@ -72,6 +72,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Business\Curator.cs" />
+    <Compile Include="Business\Delegates.cs" />
     <Compile Include="Business\FileCopySequencer.cs" />
     <Compile Include="Business\FileProgressRepresenter.cs" />
     <Compile Include="Business\FileSizeRepresenter.cs" />
@@ -150,6 +151,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="appicon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\headerIco.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="headerIco.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

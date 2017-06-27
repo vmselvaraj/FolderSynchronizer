@@ -11,6 +11,8 @@ namespace FolderSyncronizer.Controller
     public class FolderBrowser : IFolderBrowser
     {
         private string FolderPath { get; set; }
+        public event Business.BrowsePathChangedDelegate BrowsePatchChanged;
+
         public FolderBrowser(string folderPath)
         {
             FolderPath = folderPath;
@@ -72,5 +74,8 @@ namespace FolderSyncronizer.Controller
                 parent.Children.Add(item);
             }
         }
+
+
+        
     }
 }

@@ -1,4 +1,5 @@
-﻿using FolderSyncronizer.DataModel;
+﻿using FolderSyncronizer.Business;
+using FolderSyncronizer.DataModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,9 @@ namespace FolderSyncronizer.Controller
     public interface IFolderBrowser
     {
         FileFolderItem GetFileFolderItem();
+
+        event BrowsePathChangedDelegate BrowsePatchChanged;
+
+
     }
 }

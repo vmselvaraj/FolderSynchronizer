@@ -14,6 +14,7 @@ namespace FolderSyncronizer.ViewModel
     public class FolderAndFileSyncViewModel : INotifyPropertyChanged
     {
         public Settings Settings { get; set; }
+        public event BrowsePathChangedDelegate BrowsePatchChanged;
 
         private ObservableCollection<FileFolderItem> m_LocalFileFolderItem = null;
         public  ObservableCollection<FileFolderItem> LocalFileFolderItem
@@ -130,7 +131,14 @@ namespace FolderSyncronizer.ViewModel
         private FileFolderItem GetFileFolderItem(string path)
         {
             IFolderBrowser browser = new CommandLineFolderBrowser(path);
+            browser.BrowsePatchChanged += browser_BrowsePatchChanged;
             return browser.GetFileFolderItem();
+        }
+
+        void browser_BrowsePatchChanged(string path)
+        {
+            if (BrowsePatchChanged != null)
+                BrowsePatchChanged(path);
         }
 
         #region INotifyPropertyChanged Implementation
